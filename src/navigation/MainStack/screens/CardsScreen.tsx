@@ -18,8 +18,17 @@ import { COMMON_ICONS } from "@foodstyles/constants/AppIcons";
 import { styles } from "./CardsScreen.styles";
 import { BlurView } from "expo-blur";
 import { useDispatch, useSelector } from "react-redux";
-import { addCards, getCards } from "@foodstyles/redux/actions/Cards";
-import { currentCards } from "@foodstyles/redux/selectors/Cards";
+import {
+  addCards,
+  getCards,
+  deleteCard,
+  dupCard,
+  shareData,
+} from "@foodstyles/redux/actions/Cards";
+import {
+  currentCards,
+  shareDataTransmuted,
+} from "@foodstyles/redux/selectors/Cards";
 import {
   CardsListData,
   CardsListDataWithMutation,
@@ -40,12 +49,10 @@ export const CardsScreen = () => {
     },
   ]);
 
-  var myArray = ["Apples", "Bananas", "Pears"];
-
   const [toggleBlur, settoggleBlur] = useState(false);
   const [activeData, setActiveData] = useState<CardsListDataWithMutation>({
     id: "",
-    name: "dummy",
+    name: "",
     shareMutation: "",
   });
   const dispatch = useDispatch();
@@ -54,7 +61,7 @@ export const CardsScreen = () => {
     try {
       const result = await Share.share({
         message: activeData.name,
-        url: activeData.shareMutation,
+        url: "https://cards.foodstyles.com/" + activeData.shareMutation,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -72,6 +79,7 @@ export const CardsScreen = () => {
   };
 
   const CardsListDataList: CardsListData[] = useSelector(currentCards);
+  const shareDataTransmutedData: string = useSelector(shareDataTransmuted);
 
   useEffect(() => {
     dispatch(getCards());
@@ -80,6 +88,12 @@ export const CardsScreen = () => {
   useEffect(() => {
     setCardData(CardsListDataList);
   }, [CardsListDataList]);
+
+  useEffect(() => {
+    let existingActiveData: CardsListDataWithMutation = activeData;
+    existingActiveData.shareMutation = shareDataTransmutedData;
+    setActiveData(existingActiveData);
+  }, [shareDataTransmutedData]);
 
   return (
     <View>
@@ -100,11 +114,14 @@ export const CardsScreen = () => {
                   onPress={() => {
                     setBlurIntensity(40);
                     settoggleBlur(true);
+
                     setActiveData({
                       id: item.id.toString(),
                       name: item.name,
                       shareMutation: "",
                     });
+
+                    dispatch(dispatch(shareData(parseInt(item.id))));
                   }}
                 >
                   <Text style={styles.itemStyle}>{item.name}</Text>
@@ -134,11 +151,11 @@ export const CardsScreen = () => {
               dispatch(
                 addCards(
                   LIST_OF_RANDOM_WORDS[
-                    Math.floor(Math.random() * myArray.length)
+                    Math.floor(Math.random() * LIST_OF_RANDOM_WORDS.length)
                   ] +
                     " " +
                     LIST_OF_RANDOM_WORDS_APPENDABLE[
-                      Math.floor(Math.random() * myArray.length)
+                      Math.floor(Math.random() * LIST_OF_RANDOM_WORDS.length)
                     ]
                 )
               );
@@ -169,15 +186,16 @@ export const CardsScreen = () => {
               <Text style={styles.addNewItemActive}>{activeData.name}</Text>
               <TouchableOpacity
                 onPress={() => {
-                  Alert.alert("close");
+                  setBlurIntensity(0);
+                  settoggleBlur(false);
                 }}
               >
                 <Image
                   style={{
                     position: "absolute",
                     right: 0,
-                    bottom: 10,
-                    margin: 15 / getRatio(),
+                    bottom: 0,
+                    margin: 20 / getRatio(),
                   }}
                   source={COMMON_ICONS.close}
                   resizeMode="contain"
@@ -202,7 +220,9 @@ export const CardsScreen = () => {
             <View style={[styles.modControlsDuplicate]}>
               <TouchableOpacity
                 onPress={() => {
-                  Alert.alert("duplicate");
+                  dispatch(dupCard(parseInt(activeData.id)));
+                  setBlurIntensity(0);
+                  settoggleBlur(false);
                 }}
               >
                 <Text style={styles.modControlsText}>Duplicate</Text>
@@ -221,7 +241,26 @@ export const CardsScreen = () => {
             <View style={[styles.modControlsDelete]}>
               <TouchableOpacity
                 onPress={() => {
-                  Alert.alert("delete");
+                  Alert.alert(
+                    "Confirm delete",
+                    "This will delete the Food Style and all its settings.",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel",
+                      },
+                      {
+                        text: "Delete",
+                        onPress: () => {
+                          dispatch(deleteCard(parseInt(activeData.id)));
+                          Alert.alert("Successfully Deleted!");
+                          setBlurIntensity(0);
+                          settoggleBlur(false);
+                        },
+                      },
+                    ]
+                  );
                 }}
               >
                 <Text style={styles.modControlsText}>Delete</Text>

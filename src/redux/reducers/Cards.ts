@@ -6,6 +6,7 @@ import { CardsListData } from "@foodstyles/interfaces/mainInterfaces";
 
 interface CardsState {
   CardsData: CardsListData[];
+  shareData: string;
 }
 const initState: CardsState = {
   CardsData: [
@@ -14,6 +15,7 @@ const initState: CardsState = {
       name: "",
     },
   ],
+  shareData: "",
 };
 
 export default (state = initState, action: MainCardsActions): CardsState => {
@@ -21,6 +23,10 @@ export default (state = initState, action: MainCardsActions): CardsState => {
     case CardsEnums.GET_CARDS_SUCCESS:
       return produce(state, (draft) => {
         draft.CardsData = action.payload;
+      });
+    case CardsEnums.SHARE_SUCCESS:
+      return produce(state, (draft) => {
+        draft.shareData = action.payload;
       });
 
     default:

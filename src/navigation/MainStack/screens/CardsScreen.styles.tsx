@@ -72,6 +72,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     fontFamily: "ProximaNovaAltBold",
     maxWidth: 300 / getRatio(),
+    textTransform: "capitalize",
   },
 
   addNewContainerStyle: {
@@ -99,6 +100,7 @@ export const styles = StyleSheet.create({
     maxWidth: 300 / getRatio(),
     padding: 20,
     fontFamily: "ProximaNovaAltBold",
+    textTransform: "capitalize",
   },
   modContainers: {
     shadowColor: "#b0b0b0",
