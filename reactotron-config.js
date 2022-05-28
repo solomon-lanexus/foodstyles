@@ -5,7 +5,7 @@ import sagaPlugin from 'reactotron-redux-saga';
 
 const reactotron = Reactotron.setAsyncStorageHandler(AsyncStorage)
   .configure({
-    name: 'JOYSTIK',
+    name: 'FOODSTYLES',
   })
   .useReactNative({
     asyncStorage: {

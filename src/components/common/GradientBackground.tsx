@@ -16,7 +16,7 @@ const defaultProps = {
 };
 
 export default function GradientBackground(props: {
-  children: ReactChild | ReactChildren | never[] | undefined;
+  children: ReactChild | ReactChildren | any[] | undefined;
   type?: 1 | 2;
   radialProps?: {
     centerX?: NumberProp;
@@ -39,9 +39,9 @@ export default function GradientBackground(props: {
   const renderLinear = () => {
     return (
       <LinearGradient
-        colors={props.linearProps?.colors ?? ['#5134FF', '#7D61F7', '#957CF1']}
-        start={props.linearProps?.start ?? {x: 0.0, y: 0.0}}
-        end={props.linearProps?.end ?? {x: 1.0, y: 0.5}}
+        colors={props.linearProps?.colors ?? ['#FA7745', '#F3C442', '#FFFFFF']}
+        start={props.linearProps?.start ?? {x: 0.1, y: 0.04}}
+        end={props.linearProps?.end ?? {x: 0.1, y: 0.2}}
         style={styles.gradientBg}>
         {fProps.children}
       </LinearGradient>
@@ -54,12 +54,12 @@ export default function GradientBackground(props: {
         <Defs>
           <RadialGradient
             id="radialG"
-            cx={props.radialProps?.centerX ?? '50%'}
-            cy={props.radialProps?.centerY ?? '50%'}
-            rx={props.radialProps?.radiusX ?? '50%'}
-            ry={props.radialProps?.radiusY ?? '50%'}
-            fx={props.radialProps?.focusX ?? '50%'}
-            fy={props.radialProps?.focusY ?? '50%'}
+            cx={props.radialProps?.centerX ?? '10%'}
+            cy={props.radialProps?.centerY ?? '10%'}
+            rx={props.radialProps?.radiusX ?? '10%'}
+            ry={props.radialProps?.radiusY ?? '10%'}
+            fx={props.radialProps?.focusX ?? '10%'}
+            fy={props.radialProps?.focusY ?? '10%'}
             gradientUnits="userSpaceOnUse">
             <Stop
               offset="0"
