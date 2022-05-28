@@ -10,11 +10,12 @@ import {
 } from "@foodstyles/redux/actions/Cards";
 
 import {
+  AddCardsAction,
   GetCardsAction,
   GetCardsActionSuccess,
 } from "@foodstyles/redux/types/Cards";
 import { CardsListData } from "@foodstyles/interfaces/mainInterfaces";
-import { GraphQLGetCards } from "../graphQL/Cards";
+import { GraphQLAddCards, GraphQLGetCards } from "../graphQL/Cards";
 
 const logError = (error: any) => {
   LoggingService.error(`CARDS HANDLER ERROR: ${error.message}`);
@@ -31,4 +32,18 @@ function* requestGetCards(action: GetCardsAction) {
   }
 }
 
-export default all([takeLatest(CardsEnums.GET_CARDS, requestGetCards)]);
+function* addCardsCards(action: AddCardsAction) {
+  try {
+    yield call(GraphQLAddCards, action.payload);
+    const RESP: any = JSON.parse(yield call(GraphQLGetCards));
+    const cardDataResp: CardsListData[] = RESP.data.cards;
+    yield put(getCardsSuccess(cardDataResp));
+  } catch (error) {
+    logError("error");
+  }
+}
+
+export default all([
+  takeLatest(CardsEnums.GET_CARDS, requestGetCards),
+  takeLatest(CardsEnums.ADD_CARDS, addCardsCards),
+]);

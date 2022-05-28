@@ -6,6 +6,7 @@ import { CardsEnums } from "@foodstyles/redux/actions/Cards";
 import { IAction } from "./common";
 
 export type GetCardsAction = IAction<typeof CardsEnums.GET_CARDS, null>;
+export type AddCardsAction = IAction<typeof CardsEnums.ADD_CARDS, string>;
 
 export type GetCardsActionSuccess = IAction<
   typeof CardsEnums.GET_CARDS_SUCCESS,

@@ -18,7 +18,7 @@ import { COMMON_ICONS } from "@foodstyles/constants/AppIcons";
 import { styles } from "./CardsScreen.styles";
 import { BlurView } from "expo-blur";
 import { useDispatch, useSelector } from "react-redux";
-import { getCards } from "@foodstyles/redux/actions/Cards";
+import { addCards, getCards } from "@foodstyles/redux/actions/Cards";
 import { currentCards } from "@foodstyles/redux/selectors/Cards";
 import {
   CardsListData,
@@ -26,6 +26,10 @@ import {
 } from "@foodstyles/interfaces/mainInterfaces";
 import { getRatio } from "@foodstyles/utils/styling/font";
 import { useEffect, useRef, useState } from "react";
+import {
+  LIST_OF_RANDOM_WORDS,
+  LIST_OF_RANDOM_WORDS_APPENDABLE,
+} from "@foodstyles/constants/AppConstants";
 
 export const CardsScreen = () => {
   const [blurIntensity, setBlurIntensity] = useState(0);
@@ -35,6 +39,8 @@ export const CardsScreen = () => {
       name: "",
     },
   ]);
+
+  var myArray = ["Apples", "Bananas", "Pears"];
 
   const [toggleBlur, settoggleBlur] = useState(false);
   const [activeData, setActiveData] = useState<CardsListDataWithMutation>({
@@ -123,16 +129,34 @@ export const CardsScreen = () => {
         ></BlurView>
 
         <View style={styles.addNewContainerStyle}>
-          <Image
-            style={{
-              position: "absolute",
-              left: 0,
-              margin: 15 / getRatio(),
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(
+                addCards(
+                  LIST_OF_RANDOM_WORDS[
+                    Math.floor(Math.random() * myArray.length)
+                  ] +
+                    " " +
+                    LIST_OF_RANDOM_WORDS_APPENDABLE[
+                      Math.floor(Math.random() * myArray.length)
+                    ]
+                )
+              );
+
+              Alert.alert("New Card added");
             }}
-            source={COMMON_ICONS.add1x}
-            resizeMode="contain"
-          />
-          <Text style={styles.addNewItem}>New Food style</Text>
+          >
+            <Image
+              style={{
+                position: "absolute",
+                left: 0,
+                margin: 10 / getRatio(),
+              }}
+              source={COMMON_ICONS.add1x}
+              resizeMode="contain"
+            />
+            <Text style={styles.addNewItem}>New Food style</Text>
+          </TouchableOpacity>
         </View>
         <BlurView
           intensity={blurIntensity}
