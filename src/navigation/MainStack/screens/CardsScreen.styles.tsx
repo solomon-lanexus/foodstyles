@@ -17,10 +17,10 @@ export const styles = StyleSheet.create({
     width: '80%',
   },
   iconStyle: {
-    alignSelf: 'center',
+    left: 10,
     marginTop: adjustIconTopMargin(),
-    width: 159,
-    height: 156,
+    width: 22,
+    height: 26,
     position: 'absolute',
   },
   bgContainer: {
