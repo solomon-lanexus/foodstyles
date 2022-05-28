@@ -4,7 +4,7 @@ Techstack:
 
 - react-native
 - Expo
-- Redux saga
+- Redux
 - Redux saga
 - GraphQL
 
