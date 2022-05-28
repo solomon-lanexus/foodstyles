@@ -1,6 +1,6 @@
 import LoggingService from "@foodstyles/utils/logging/LoggingService";
 
-import { GRAPHQL_ENDPOINT } from "@foodstyles/constants/Config";
+import { ACCESS_TOKEN, GRAPHQL_ENDPOINT } from "@foodstyles/constants/Config";
 
 import axios from "axios";
 const logError = (messageRoot: string, error: any) => {
@@ -9,7 +9,7 @@ const logError = (messageRoot: string, error: any) => {
   );
 };
 
-export function getCards(loginCreds: any): Promise<any> {
+export function GraphQLGetCards(): Promise<any> {
   return new Promise((resolve, reject) => {
     try {
       var data = JSON.stringify({
@@ -27,6 +27,7 @@ export function getCards(loginCreds: any): Promise<any> {
         url: GRAPHQL_ENDPOINT,
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + ACCESS_TOKEN,
         },
         data: data,
       };

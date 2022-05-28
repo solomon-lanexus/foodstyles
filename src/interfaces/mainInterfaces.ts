@@ -12,11 +12,13 @@ export interface RegistrationData {
   password: string;
 }
 
-
 export interface CardsListData {
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
- 
 
- 
+export interface CardsListDataWithMutation {
+  id: string;
+  name: string;
+  shareMutation: string;
+}

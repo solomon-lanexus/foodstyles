@@ -9,8 +9,12 @@ import {
   getCardsSuccess,
 } from "@foodstyles/redux/actions/Cards";
 
-import { GetCardsAction, GetCardsActionSuccess } from "@foodstyles/redux/types/Cards";
+import {
+  GetCardsAction,
+  GetCardsActionSuccess,
+} from "@foodstyles/redux/types/Cards";
 import { CardsListData } from "@foodstyles/interfaces/mainInterfaces";
+import { GraphQLGetCards } from "../graphQL/Cards";
 
 const logError = (error: any) => {
   LoggingService.error(`CARDS HANDLER ERROR: ${error.message}`);
@@ -19,7 +23,8 @@ const logError = (error: any) => {
 
 function* requestGetCards(action: GetCardsAction) {
   try {
-    const cardDataResp: CardsListData[] = yield call(getCards);
+    const RESP: any = JSON.parse(yield call(GraphQLGetCards));
+    const cardDataResp: CardsListData[] = RESP.data.cards;
     yield put(getCardsSuccess(cardDataResp));
   } catch (error) {
     logError("error");
